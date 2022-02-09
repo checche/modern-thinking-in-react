@@ -53,14 +53,12 @@ const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, produc
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow
-
           category={product.category}
           key={product.category} />
       );
     }
     rows.push(
       <ProductRow
-
         product={product}
         key={product.name}
       />
@@ -85,12 +83,18 @@ const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, produc
 
 }
 
-const SearchBar: React.VFC<{ filterText: string, inStockOnly: boolean, onFilterTextChange: (e: any) => void, onInStockChange: (e: any) => void }> = (props) => {
-  function handleFilterTextChange(e:any) {
+const SearchBar: React.VFC<{
+  filterText: string,
+  inStockOnly: boolean,
+  onFilterTextChange: (filterText: string) => void,
+  onInStockChange: (inStockOnly: boolean) => void
+}> = (props) => {
+
+  function handleFilterTextChange(e: React.ChangeEvent<HTMLInputElement>):void {
     props.onFilterTextChange(e.target.value);
   }
 
-  function handleInStockChange(e:any) {
+  function handleInStockChange(e: React.ChangeEvent<HTMLInputElement>):void {
     props.onInStockChange(e.target.checked);
   }
 
@@ -99,14 +103,12 @@ const SearchBar: React.VFC<{ filterText: string, inStockOnly: boolean, onFilterT
       <input
         type="text"
         placeholder="Search..."
-
         value={props.filterText}
         onChange={handleFilterTextChange}
       />
       <p>
         <input
           type="checkbox"
-
           checked={props.inStockOnly}
           onChange={handleInStockChange}
         />
