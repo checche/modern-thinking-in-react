@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+import PropTypes from 'prop-types';
+import React, {useState} from 'react';
 
 import './App.css';
 
@@ -9,6 +10,13 @@ type Product = {
   name: string;
 };
 
+const productPropType = PropTypes.shape({
+  category: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  stocked: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
+}).isRequired;
+
 const ProductCategoryRow: React.VFC<{ category: string }> = (props) => {
   const category = props.category;
   return (
@@ -18,13 +26,17 @@ const ProductCategoryRow: React.VFC<{ category: string }> = (props) => {
       </th>
     </tr>
   );
-}
+};
+
+ProductCategoryRow.propTypes = {
+  category: PropTypes.string.isRequired,
+};
 
 const ProductRow: React.VFC<{ product: Product }> = (props) => {
   const product = props.product;
   const name = product.stocked ?
     product.name :
-    <span style={{ color: 'red' }}>
+    <span style={{color: 'red'}}>
       {product.name}
     </span>;
 
@@ -34,9 +46,17 @@ const ProductRow: React.VFC<{ product: Product }> = (props) => {
       <td>{product.price}</td>
     </tr>
   );
-}
+};
 
-const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, products: Product[] }> = (props) => {
+ProductRow.propTypes = {
+  product: productPropType,
+};
+
+const ProductTable: React.VFC<{
+  filterText: string,
+  inStockOnly: boolean,
+  products: Product[],
+}> = (props) => {
   const filterText = props.filterText;
   const inStockOnly = props.inStockOnly;
   const rows: JSX.Element[] = [];
@@ -52,16 +72,17 @@ const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, produc
 
     if (product.category !== lastCategory) {
       rows.push(
-        <ProductCategoryRow
-          category={product.category}
-          key={product.category} />
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category}
+          />,
       );
     }
     rows.push(
-      <ProductRow
-        product={product}
-        key={product.name}
-      />
+        <ProductRow
+          product={product}
+          key={product.name}
+        />,
     );
     lastCategory = product.category;
   });
@@ -79,9 +100,15 @@ const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, produc
         {rows}
       </tbody>
     </table>
-    );
+  );
+};
 
-}
+ProductTable.propTypes = {
+  filterText: PropTypes.string.isRequired,
+  inStockOnly: PropTypes.bool.isRequired,
+  products: PropTypes.arrayOf(productPropType).isRequired,
+};
+
 
 const SearchBar: React.VFC<{
   filterText: string,
@@ -89,7 +116,6 @@ const SearchBar: React.VFC<{
   onFilterTextChange: (filterText: string) => void,
   onInStockChange: (inStockOnly: boolean) => void
 }> = (props) => {
-
   function handleFilterTextChange(e: React.ChangeEvent<HTMLInputElement>):void {
     props.onFilterTextChange(e.target.value);
   }
@@ -117,8 +143,14 @@ const SearchBar: React.VFC<{
       </p>
     </form>
   );
+};
 
-}
+SearchBar.propTypes = {
+  filterText: PropTypes.string.isRequired,
+  inStockOnly: PropTypes.bool.isRequired,
+  onFilterTextChange: PropTypes.func.isRequired,
+  onInStockChange: PropTypes.func.isRequired,
+};
 
 const FilterableProductTable: React.VFC<{ products: Product[]}> = (props) => {
   const [filterText, setFilterText] = useState('');
@@ -129,7 +161,7 @@ const FilterableProductTable: React.VFC<{ products: Product[]}> = (props) => {
   }
 
   function handleInStockChange(inStockOnly:boolean):void {
-    setInStockOnly(inStockOnly)
+    setInStockOnly(inStockOnly);
   }
 
   return (
@@ -147,17 +179,50 @@ const FilterableProductTable: React.VFC<{ products: Product[]}> = (props) => {
       />
     </div>
   );
+};
 
-}
+FilterableProductTable.propTypes = {
+  products: PropTypes.arrayOf(productPropType).isRequired,
+};
 
 
 const PRODUCTS: Product[] = [
-  { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
-  { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
-  { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
-  { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
-  { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
-  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
+  {
+    category: 'Sporting Goods',
+    price: '$49.99',
+    stocked: true,
+    name: 'Football',
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$9.99',
+    stocked: true,
+    name: 'Baseball',
+  },
+  {
+    category: 'Sporting Goods',
+    price: '$29.99',
+    stocked: false,
+    name: 'Basketball',
+  },
+  {
+    category: 'Electronics',
+    price: '$99.99',
+    stocked: true,
+    name: 'iPod Touch',
+  },
+  {
+    category: 'Electronics',
+    price: '$399.99',
+    stocked: false,
+    name: 'iPhone 5',
+  },
+  {
+    category: 'Electronics',
+    price: '$199.99',
+    stocked: true,
+    name: 'Nexus 7',
+  },
 ];
 
 
@@ -165,6 +230,6 @@ const App:React.VFC = () => {
   return (
     <FilterableProductTable products={PRODUCTS} />
   );
-}
+};
 
 export default App;
