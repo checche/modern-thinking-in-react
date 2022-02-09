@@ -9,7 +9,7 @@ type Product = {
   name: string;
 };
 
-function ProductCategoryRow(props:{category: string}) {
+const ProductCategoryRow: React.VFC<{ category: string }> = (props) => {
   const category = props.category;
   return (
     <tr>
@@ -20,7 +20,7 @@ function ProductCategoryRow(props:{category: string}) {
   );
 }
 
-function ProductRow(props:{product: Product}) {
+const ProductRow: React.VFC<{ product: Product }> = (props) => {
   const product = props.product;
   const name = product.stocked ?
     product.name :
@@ -36,7 +36,7 @@ function ProductRow(props:{product: Product}) {
   );
 }
 
-function ProductTable(props:{filterText: string, inStockOnly: boolean, products: Product[]}) {
+const ProductTable: React.VFC<{ filterText: string, inStockOnly: boolean, products: Product[] }> = (props) => {
   const filterText = props.filterText;
   const inStockOnly = props.inStockOnly;
   const rows: JSX.Element[] = [];
@@ -85,7 +85,7 @@ function ProductTable(props:{filterText: string, inStockOnly: boolean, products:
 
 }
 
-function SearchBar(props: { filterText: string, inStockOnly: boolean, onFilterTextChange: (e: any) => void, onInStockChange: (e: any) => void}) {
+const SearchBar: React.VFC<{ filterText: string, inStockOnly: boolean, onFilterTextChange: (e: any) => void, onInStockChange: (e: any) => void }> = (props) => {
   function handleFilterTextChange(e:any) {
     props.onFilterTextChange(e.target.value);
   }
@@ -118,7 +118,7 @@ function SearchBar(props: { filterText: string, inStockOnly: boolean, onFilterTe
 
 }
 
-function FilterableProductTable(props: {products: Product[]}) {
+const FilterableProductTable: React.VFC<{ products: Product[]}> = (props) => {
   const [filterText, setFilterText] = useState('');
   const [inStockOnly, setInStockOnly] = useState(false);
 
@@ -159,9 +159,8 @@ const PRODUCTS: Product[] = [
 ];
 
 
-function App() {
+const App:React.VFC = () => {
   return (
-
     <FilterableProductTable products={PRODUCTS} />
   );
 }
