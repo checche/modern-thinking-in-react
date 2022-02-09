@@ -1,8 +1,15 @@
 import React,{useState} from 'react';
+
 import './App.css';
 
-function ProductCategoryRow(props:any) {
-  // @ts-ignore
+type Product = {
+  category: string;
+  price: string;
+  stocked: boolean;
+  name: string;
+};
+
+function ProductCategoryRow(props:{category: string}) {
   const category = props.category;
   return (
     <tr>
@@ -13,8 +20,7 @@ function ProductCategoryRow(props:any) {
   );
 }
 
-function ProductRow(props:any) {
-  // @ts-ignore
+function ProductRow(props:{product: Product}) {
   const product = props.product;
   const name = product.stocked ?
     product.name :
@@ -30,16 +36,12 @@ function ProductRow(props:any) {
   );
 }
 
-function ProductTable(props:any) {
-  // @ts-ignore
+function ProductTable(props:{filterText: string, inStockOnly: boolean, products: Product[]}) {
   const filterText = props.filterText;
-  // @ts-ignore
   const inStockOnly = props.inStockOnly;
-  // @ts-ignore
-  const rows = [];
-  // @ts-ignore
-  let lastCategory = null;
-  // @ts-ignore
+  const rows: JSX.Element[] = [];
+  let lastCategory: string | null = null;
+
   props.products.forEach((product) => {
     if (product.name.indexOf(filterText) === -1) {
       return;
@@ -47,18 +49,18 @@ function ProductTable(props:any) {
     if (inStockOnly && !product.stocked) {
       return;
     }
-    // @ts-ignore
+
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow
-        // @ts-ignore
+
           category={product.category}
           key={product.category} />
       );
     }
     rows.push(
       <ProductRow
-      // @ts-ignore
+
         product={product}
         key={product.name}
       />
@@ -75,40 +77,36 @@ function ProductTable(props:any) {
         </tr>
       </thead>
 
-      <tbody>{
-      // @ts-ignore
-        rows}</tbody>
+      <tbody>
+        {rows}
+      </tbody>
     </table>
     );
 
 }
 
-function SearchBar(props:any) {
-// @ts-ignore
-  function handleFilterTextChange(e) {
-    // @ts-ignore
+function SearchBar(props: { filterText: string, inStockOnly: boolean, onFilterTextChange: (e: any) => void, onInStockChange: (e: any) => void}) {
+  function handleFilterTextChange(e:any) {
     props.onFilterTextChange(e.target.value);
   }
-// @ts-ignore
-  function handleInStockChange(e) {
-    // @ts-ignore
+
+  function handleInStockChange(e:any) {
     props.onInStockChange(e.target.checked);
   }
-
 
   return (
     <form>
       <input
         type="text"
         placeholder="Search..."
-        // @ts-ignore
+
         value={props.filterText}
         onChange={handleFilterTextChange}
       />
       <p>
         <input
           type="checkbox"
-          // @ts-ignore
+
           checked={props.inStockOnly}
           onChange={handleInStockChange}
         />
@@ -120,34 +118,29 @@ function SearchBar(props:any) {
 
 }
 
-function FilterableProductTable(props:any) {
+function FilterableProductTable(props: {products: Product[]}) {
   const [filterText, setFilterText] = useState('');
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  function handleFilterTextChange(filterText:string) {
+  function handleFilterTextChange(filterText:string):void {
     setFilterText(filterText);
   }
 
-  function handleInStockChange(inStockOnly:boolean) {
+  function handleInStockChange(inStockOnly:boolean):void {
     setInStockOnly(inStockOnly)
   }
 
   return (
     <div>
       <SearchBar
-      // @ts-ignore
         filterText={filterText}
-        // @ts-ignore
         inStockOnly={inStockOnly}
         onFilterTextChange={handleFilterTextChange}
         onInStockChange={handleInStockChange}
       />
       <ProductTable
-      // @ts-ignore
         products={props.products}
-        // @ts-ignore
         filterText={filterText}
-        // @ts-ignore
         inStockOnly={inStockOnly}
       />
     </div>
@@ -156,7 +149,7 @@ function FilterableProductTable(props:any) {
 }
 
 
-const PRODUCTS = [
+const PRODUCTS: Product[] = [
   { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
   { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
   { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
@@ -168,7 +161,7 @@ const PRODUCTS = [
 
 function App() {
   return (
-    // @ts-ignore
+
     <FilterableProductTable products={PRODUCTS} />
   );
 }
