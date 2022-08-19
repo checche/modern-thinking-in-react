@@ -3,22 +3,8 @@ import React, {useState} from 'react';
 import './App.css';
 import {Product} from './entity/product';
 import {ProductCategoryRow} from './ui/ProductCategoryRow';
+import {ProductRow} from './ui/ProductRow';
 
-
-const ProductRow = ({product}:{ product: Product }) => {
-  const name = product.stocked ?
-    product.name :
-    <span style={{color: 'red'}}>
-      {product.name}
-    </span>;
-
-  return (
-    <tr>
-      <td>{name}</td>
-      <td>{product.price}</td>
-    </tr>
-  );
-};
 
 const ProductTable = ({filterText, inStockOnly, products}:{
   filterText: string,
