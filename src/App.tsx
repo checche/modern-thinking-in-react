@@ -1,23 +1,9 @@
 import React, {useState} from 'react';
 
 import './App.css';
+import {Product} from './entity/product';
+import {ProductCategoryRow} from './ui/ProductCategoryRow';
 
-type Product = {
-  category: string;
-  price: string;
-  stocked: boolean;
-  name: string;
-};
-
-const ProductCategoryRow = ({category}: { category: string }) => {
-  return (
-    <tr>
-      <th colSpan={2}>
-        {category}
-      </th>
-    </tr>
-  );
-};
 
 const ProductRow = ({product}:{ product: Product }) => {
   const name = product.stocked ?
