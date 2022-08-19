@@ -4,8 +4,8 @@ import {ProductTable} from './ProductTable';
 import {SearchBar} from './SearchBar';
 
 export const FilterableProductTable = ({products}:{ products: Product[]}) => {
-  const [filterText, setFilterText] = useState('');
-  const [inStockOnly, setInStockOnly] = useState(false);
+  const [filterText, setFilterText] = useState<string>('');
+  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
 
   function handleFilterTextChange(filterText:string):void {
     setFilterText(filterText);
